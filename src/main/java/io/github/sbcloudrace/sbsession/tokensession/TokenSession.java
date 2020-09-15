@@ -8,12 +8,14 @@ import org.springframework.data.annotation.Id;
 import org.springframework.data.redis.core.RedisHash;
 import org.springframework.data.redis.core.TimeToLive;
 
+import java.io.Serializable;
+
 @AllArgsConstructor
 @Getter
 @Setter
 @NoArgsConstructor
 @RedisHash("TokenSession")
-public class TokenSession {
+public class TokenSession implements Serializable {
 
     @Id
     private String securityToken;
