@@ -48,7 +48,7 @@ public class UserController {
                     0L,
                     "",
                     0L,
-                    15 * 60);
+                    300L);
             tokenSessionRepository.save(tokenSession);
             return user;
         }
