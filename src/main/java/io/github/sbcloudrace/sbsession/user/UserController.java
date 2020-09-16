@@ -25,10 +25,11 @@ public class UserController {
 
     @RequestMapping(value = "/user/{userId}", method = RequestMethod.GET)
     @ResponseBody
-    public User createTemporarySession(@PathVariable long userId) {
-        User user = new User(userId, UUID.randomUUID().toString(), 15 * 60);
+    public String createTemporarySession(@PathVariable long userId) {
+        String securityToken = UUID.randomUUID().toString();
+        User user = new User(userId, securityToken, 15 * 60);
         userRepository.save(user);
-        return user;
+        return securityToken;
     }
 
     @RequestMapping(value = "/user/{userId}/{token}", method = RequestMethod.GET)
