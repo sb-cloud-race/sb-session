@@ -1,6 +1,7 @@
 package io.github.sbcloudrace.sbsession.tokensession;
 
 
+import io.github.sbcloudrace.sbsession.user.UserRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
@@ -13,6 +14,7 @@ import java.util.Optional;
 public class TokenSessionController {
 
     private final TokenSessionRepository tokenSessionRepository;
+    private final UserRepository userRepository;
 
     @RequestMapping(value = "/tokensession/{securityToken}", method = RequestMethod.GET)
     @ResponseBody
@@ -25,6 +27,21 @@ public class TokenSessionController {
             return tokenSession;
         }
         return new TokenSession();
+    }
+
+    @RequestMapping(value = "/tokensession/keepalive/{securityToken}", method = RequestMethod.PUT)
+    @ResponseBody
+    public void keepAlive(@PathVariable String securityToken) {
+        tokenSessionRepository.findById(securityToken).ifPresent(
+                tokenSession -> {
+                    tokenSession.setTimeToLive(300L);
+                    tokenSessionRepository.save(tokenSession);
+                    userRepository.findById(tokenSession.getUserId()).ifPresent(user -> {
+                        user.setTimeToLive(300L);
+                        userRepository.save(user);
+                    });
+                }
+        );
     }
 
     @RequestMapping(value = "/tokensession", method = RequestMethod.PUT)

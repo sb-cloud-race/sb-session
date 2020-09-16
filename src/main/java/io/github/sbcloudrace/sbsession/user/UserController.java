@@ -31,14 +31,18 @@ public class UserController {
         return user;
     }
 
-    @RequestMapping(value = "/user", method = RequestMethod.POST)
+    @RequestMapping(value = "/user/{userId}/{token}", method = RequestMethod.GET)
     @ResponseBody
-    public User createPermanentSession(@RequestBody User user) {
+    public String createPermanentSession(@PathVariable long userId, @PathVariable String token) {
+        return createPermanentSession(new User(userId, token, -1)).getToken();
+    }
+
+    private User createPermanentSession(User user) {
         Optional<User> userById = userRepository.findById(user.getUserId());
         if (userById.isPresent() && userById.get().getToken().equals(user.getToken())) {
             String securityToken = UUID.randomUUID().toString();
             user.setToken(securityToken);
-            user.setTimeToLive(-1);
+            user.setTimeToLive(300L);
             tokenSessionRepository.findById(userById.get().getToken())
                     .ifPresent(tokenSessionRepository::delete);
             userRepository.save(user);
