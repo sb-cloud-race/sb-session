@@ -29,6 +29,28 @@ public class TokenSessionController {
         return new TokenSession();
     }
 
+    @RequestMapping(value = "/tokensession/active-persona-id/{securityToken}", method = RequestMethod.GET)
+    @ResponseBody
+    public Long getActivePersonaId(@PathVariable String securityToken) {
+        Optional<TokenSession> tokenSessionById = tokenSessionRepository.findById(securityToken);
+        if (tokenSessionById.isPresent()) {
+            TokenSession tokenSession = tokenSessionById.get();
+            return tokenSession.getActivePersonaId();
+        }
+        return 0L;
+    }
+
+    @RequestMapping(value = "/tokensession/active-persona-id/{securityToken}/{personaId}", method = RequestMethod.PUT)
+    @ResponseBody
+    public void setActivePersonaId(@PathVariable String securityToken, @PathVariable Long personaId) {
+        Optional<TokenSession> tokenSessionById = tokenSessionRepository.findById(securityToken);
+        if (tokenSessionById.isPresent()) {
+            TokenSession tokenSession = tokenSessionById.get();
+            tokenSession.setActivePersonaId(personaId);
+            tokenSessionRepository.save(tokenSession);
+        }
+    }
+
     @RequestMapping(value = "/tokensession/keepalive/{securityToken}", method = RequestMethod.PUT)
     @ResponseBody
     public void keepAlive(@PathVariable String securityToken) {
