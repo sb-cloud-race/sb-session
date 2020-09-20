@@ -16,19 +16,6 @@ public class TokenSessionController {
     private final TokenSessionRepository tokenSessionRepository;
     private final UserRepository userRepository;
 
-    @RequestMapping(value = "/tokensession/{securityToken}", method = RequestMethod.GET)
-    @ResponseBody
-    public TokenSession tokenSessionInfo(@PathVariable String securityToken) {
-        Optional<TokenSession> tokenSessionById = tokenSessionRepository.findById(securityToken);
-        if (tokenSessionById.isPresent()) {
-            TokenSession tokenSession = tokenSessionById.get();
-            tokenSession.setTimeToLive(300L);
-            tokenSessionRepository.save(tokenSession);
-            return tokenSession;
-        }
-        return new TokenSession();
-    }
-
     @RequestMapping(value = "/tokensession/active-persona-id/{securityToken}", method = RequestMethod.GET)
     @ResponseBody
     public Long getActivePersonaId(@PathVariable String securityToken) {
@@ -66,12 +53,4 @@ public class TokenSessionController {
         );
     }
 
-    @RequestMapping(value = "/tokensession", method = RequestMethod.PUT)
-    @ResponseBody
-    public void save(@RequestBody TokenSession tokenSession) {
-        if (tokenSessionRepository.findById(tokenSession.getSecurityToken()).isPresent()) {
-            tokenSession.setTimeToLive(300L);
-            tokenSessionRepository.save(tokenSession);
-        }
-    }
 }

@@ -17,12 +17,6 @@ public class UserController {
     private final UserRepository userRepository;
     private final TokenSessionRepository tokenSessionRepository;
 
-    @RequestMapping(value = "/debug-user/{userId}", method = RequestMethod.GET)
-    @ResponseBody
-    public User userInfo(@PathVariable long userId) {
-        return userRepository.findById(userId).orElse(new User());
-    }
-
     @RequestMapping(value = "/user/{userId}", method = RequestMethod.GET)
     @ResponseBody
     public String createTemporarySession(@PathVariable long userId) {
