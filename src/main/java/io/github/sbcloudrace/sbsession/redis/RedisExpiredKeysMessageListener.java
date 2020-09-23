@@ -7,7 +7,7 @@ import org.springframework.stereotype.Component;
 
 @Component
 @AllArgsConstructor
-public class KeySpaceNotificationMessageListener implements MessageListener {
+public class RedisExpiredKeysMessageListener implements MessageListener {
 
     // to enable redis expired keys notification run inside redis-cli:
     // config set notify-keyspace-events Ex
