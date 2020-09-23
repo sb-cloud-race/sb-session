@@ -3,6 +3,9 @@ package io.github.sbcloudrace.sbsession.user;
 import io.github.sbcloudrace.sbsession.tokensession.TokenSession;
 import io.github.sbcloudrace.sbsession.tokensession.TokenSessionRepository;
 import lombok.AllArgsConstructor;
+import org.springframework.data.redis.core.RedisOperations;
+import org.springframework.data.redis.core.StringRedisTemplate;
+import org.springframework.data.redis.core.ValueOperations;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
@@ -16,6 +19,16 @@ public class UserController {
 
     private final UserRepository userRepository;
     private final TokenSessionRepository tokenSessionRepository;
+    private final StringRedisTemplate stringRedisTemplate;
+
+    @RequestMapping(value = "/user/debug", method = RequestMethod.GET)
+    @ResponseBody
+    public String debug() {
+        ValueOperations<String, String> stringStringValueOperations = stringRedisTemplate.opsForValue();
+        stringStringValueOperations.increment("lobby_id");
+        String lobby_id = stringStringValueOperations.get("lobby_id");
+        return lobby_id;
+    }
 
     @RequestMapping(value = "/user/{userId}", method = RequestMethod.GET)
     @ResponseBody
