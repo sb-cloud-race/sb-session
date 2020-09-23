@@ -3,34 +3,24 @@ package io.github.sbcloudrace.sbsession.user;
 import io.github.sbcloudrace.sbsession.tokensession.TokenSession;
 import io.github.sbcloudrace.sbsession.tokensession.TokenSessionRepository;
 import lombok.AllArgsConstructor;
-import org.springframework.data.redis.core.RedisOperations;
-import org.springframework.data.redis.core.StringRedisTemplate;
-import org.springframework.data.redis.core.ValueOperations;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import java.util.Optional;
 import java.util.UUID;
 
 @Controller
-@RequestMapping
+@RequestMapping(value = "/user")
 @AllArgsConstructor
 public class UserController {
 
     private final UserRepository userRepository;
     private final TokenSessionRepository tokenSessionRepository;
-    private final StringRedisTemplate stringRedisTemplate;
 
-    @RequestMapping(value = "/user/debug", method = RequestMethod.GET)
-    @ResponseBody
-    public String debug() {
-        ValueOperations<String, String> stringStringValueOperations = stringRedisTemplate.opsForValue();
-        stringStringValueOperations.increment("lobby_id");
-        String lobby_id = stringStringValueOperations.get("lobby_id");
-        return lobby_id;
-    }
-
-    @RequestMapping(value = "/user/{userId}", method = RequestMethod.GET)
+    @RequestMapping(value = "/{userId}", method = RequestMethod.GET)
     @ResponseBody
     public String createTemporarySession(@PathVariable long userId) {
         String securityToken = UUID.randomUUID().toString();
@@ -39,7 +29,7 @@ public class UserController {
         return securityToken;
     }
 
-    @RequestMapping(value = "/user/{userId}/{token}", method = RequestMethod.GET)
+    @RequestMapping(value = "/{userId}/{token}", method = RequestMethod.GET)
     @ResponseBody
     public String createPermanentSession(@PathVariable long userId, @PathVariable String token) {
         return createPermanentSession(new User(userId, token, -1)).getToken();
