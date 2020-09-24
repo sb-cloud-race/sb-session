@@ -9,14 +9,14 @@ import org.springframework.web.bind.annotation.*;
 import java.util.Optional;
 
 @Controller
-@RequestMapping
+@RequestMapping("/tokensession")
 @AllArgsConstructor
 public class TokenSessionController {
 
     private final TokenSessionRepository tokenSessionRepository;
     private final UserRepository userRepository;
 
-    @RequestMapping(value = "/tokensession/active-persona-id/{securityToken}", method = RequestMethod.GET)
+    @RequestMapping(value = "/active-persona-id/{securityToken}", method = RequestMethod.GET)
     @ResponseBody
     public Long getActivePersonaId(@PathVariable String securityToken) {
         Optional<TokenSession> tokenSessionById = tokenSessionRepository.findById(securityToken);
@@ -27,7 +27,7 @@ public class TokenSessionController {
         return 0L;
     }
 
-    @RequestMapping(value = "/tokensession/active-persona-id/{securityToken}/{personaId}", method = RequestMethod.PUT)
+    @RequestMapping(value = "/active-persona-id/{securityToken}/{personaId}", method = RequestMethod.PUT)
     @ResponseBody
     public void setActivePersonaId(@PathVariable String securityToken, @PathVariable Long personaId) {
         Optional<TokenSession> tokenSessionById = tokenSessionRepository.findById(securityToken);
@@ -38,7 +38,7 @@ public class TokenSessionController {
         }
     }
 
-    @RequestMapping(value = "/tokensession/keepalive/{securityToken}", method = RequestMethod.PUT)
+    @RequestMapping(value = "/keepalive/{securityToken}", method = RequestMethod.PUT)
     @ResponseBody
     public void keepAlive(@PathVariable String securityToken) {
         tokenSessionRepository.findById(securityToken).ifPresent(

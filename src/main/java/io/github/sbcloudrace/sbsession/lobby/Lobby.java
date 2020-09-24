@@ -7,6 +7,7 @@ import lombok.Setter;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.redis.core.RedisHash;
 import org.springframework.data.redis.core.TimeToLive;
+import org.springframework.data.redis.core.index.Indexed;
 
 import java.io.Serializable;
 import java.util.concurrent.TimeUnit;
@@ -21,6 +22,7 @@ public class Lobby implements Serializable {
     @Id
     private Long lobbyId;
 
+    @Indexed
     private Integer eventId;
 
     @TimeToLive(unit = TimeUnit.MILLISECONDS)
