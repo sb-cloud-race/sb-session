@@ -52,7 +52,7 @@ public class LobbyController {
     @ResponseBody
     public Long createLobby(@PathVariable Integer eventId) {
         Long nextLobbyId = getNextLobbyId();
-        Lobby lobby = new Lobby(nextLobbyId, eventId, 6000000L);
+        Lobby lobby = new Lobby(nextLobbyId, eventId, 60000L);
         lobbyRepository.save(lobby);
         return nextLobbyId;
     }
