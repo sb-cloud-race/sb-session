@@ -7,7 +7,7 @@ import org.springframework.stereotype.Component;
 @Component
 public class LobbyListener {
 
-    // not respecting the diamond type signature, usim SpEL
+    // not respecting the diamond type signature, using SpEL to fix
     @EventListener(condition = "#object.getValue() instanceof T(io.github.sbcloudrace.sbsession.lobby.Lobby)")
     public void onLobbyExpires(RedisKeyExpiredEvent<Lobby> object) {
         Lobby expiredLobby = (Lobby) object.getValue();
